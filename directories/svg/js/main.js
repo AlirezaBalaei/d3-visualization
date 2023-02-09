@@ -13,7 +13,7 @@ d3.json("/directories/svg/data/buildings.json")
       .domain(Object.keys(data))
       .range([0, svgWidth])
       .paddingInner(0.3)
-      .paddingOuter(0.2)
+      .paddingOuter(0.3)
 
     let svg = d3
       .select("#chart-area")
