@@ -50,7 +50,7 @@ d3.json("/directories/svg/data/buildings.json")
       .attr("transform", "rotate(-20)")
 
     // Axis Y
-    let yAxisCall = d3.axisLeft(y)
+    let yAxisCall = d3.axisLeft(y).tickFormat((d) => d + " m")
     g.append("g").call(yAxisCall).attr("class", "y-axis")
 
     // X Lable
