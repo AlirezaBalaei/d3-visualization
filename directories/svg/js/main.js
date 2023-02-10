@@ -5,7 +5,7 @@ d3.json("/directories/svg/data/buildings.json")
     })
 
     // Essentials
-    let margin = { left: 100, right: 10, top: 10, bottom: 100 }
+    let margin = { left: 100, right: 10, top: 10, bottom: 120 }
     let svgWidth = 1024
     let svgHeight = 500
     let marginedWidth = svgWidth - margin.left - margin.right
@@ -38,8 +38,6 @@ d3.json("/directories/svg/data/buildings.json")
     let g = svg
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`)
-    //.call(xAxisCall)
-    //.call(yAxisCall)
 
     // Axis X
     let xAxisCall = d3.axisBottom(x)
@@ -54,6 +52,16 @@ d3.json("/directories/svg/data/buildings.json")
     // Axis Y
     let yAxisCall = d3.axisLeft(y)
     g.append("g").call(yAxisCall).attr("class", "y-axis")
+
+    // X Lable
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("text-anchor", "middle")
+      .attr("class", "y axis-label h4")
+      .attr("x", -marginedHeight / 2)
+      .attr("y", -margin.left / 2)
+      .text("height m()")
+    // Y Lable
 
     // Bands as rectangle
     let rectangles = g.selectAll("rect").data(data)
