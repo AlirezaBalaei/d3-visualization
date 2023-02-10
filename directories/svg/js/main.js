@@ -38,6 +38,22 @@ d3.json("/directories/svg/data/buildings.json")
     let g = svg
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`)
+    //.call(xAxisCall)
+    //.call(yAxisCall)
+
+    // Axis X
+    let xAxisCall = d3.axisBottom(x)
+    g.append("g")
+      .call(xAxisCall)
+      .attr("transform", `translate(${0},${marginedHeight})`)
+      .attr("class", "x-axis")
+      .selectAll("text")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-20)")
+
+    // Axis Y
+    let yAxisCall = d3.axisLeft(y)
+    g.append("g").call(yAxisCall).attr("class", "y-axis")
 
     // Bands as rectangle
     let rectangles = g.selectAll("rect").data(data)
