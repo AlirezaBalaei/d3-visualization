@@ -5,9 +5,9 @@ d3.json("/directories/svg/data/buildings.json")
     })
 
     // Essentials
-    let margin = { left: 100, right: 10, top: 10, bottom: 120 }
+    let margin = { left: 100, right: 10, top: 10, bottom: 150 }
     let svgWidth = 1024
-    let svgHeight = 500
+    let svgHeight = 700
     let marginedWidth = svgWidth - margin.left - margin.right
     let marginedHeight = svgHeight - margin.top - margin.bottom
     let color = d3.scaleOrdinal().domain([0, 4]).range(d3.schemeSet3)
@@ -62,6 +62,14 @@ d3.json("/directories/svg/data/buildings.json")
       .attr("y", -margin.left / 2)
       .text("height m()")
     // Y Lable
+    g.append("text")
+      .attr("text-anchor", "middle")
+      .attr(
+        "transform",
+        `translate(${marginedWidth / 2},${marginedHeight + 120})`
+      )
+      .attr("class", "y axis-label h4")
+      .text("Tall Buildings")
 
     // Bands as rectangle
     let rectangles = g.selectAll("rect").data(data)
