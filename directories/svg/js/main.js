@@ -16,7 +16,7 @@ d3.json("/directories/svg/data/buildings.json")
     let y = d3
       .scaleLinear()
       .domain([0, d3.max(data, (d) => d.height)])
-      .range([0, marginedHeight])
+      .range([marginedHeight, 0])
 
     // X attribute
     let x = d3
@@ -77,10 +77,10 @@ d3.json("/directories/svg/data/buildings.json")
       .enter()
       .append("rect")
       .attr("x", (data) => x(data.name))
-      .attr("y", 0)
+      .attr("y", (data) => y(data.height))
       .attr("width", x.bandwidth())
       .attr("height", (data, index) => {
-        return y(data.height)
+        return marginedHeight - y(data.height)
       })
       .attr("name", (data) => {
         return data.name
