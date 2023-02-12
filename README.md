@@ -1,6 +1,8 @@
 # d3.js visualization
 
 ![image](https://user-images.githubusercontent.com/99330644/218257285-1278f65d-f136-4afc-9a14-1dcb1bc2feac.png)
+![image](https://user-images.githubusercontent.com/99330644/218312233-d6153c9e-adb2-4d17-9eef-8ffdd6c1915f.png)
+
 open git bash and run:
 
 ```
