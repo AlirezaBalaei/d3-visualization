@@ -104,6 +104,10 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .attr("y", (data) => {
         return marginHeight - (marginHeight - y(data.revenue));
       });
+
+    d3.interval(() => {
+      console.log(new Date().getSeconds());
+    }, 1000);
     // <-- then block ends
   })
   .catch((err) => console.log(err));
