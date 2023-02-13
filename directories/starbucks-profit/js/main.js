@@ -3,6 +3,8 @@ let svgHeight = 400;
 let margin = { top: 10, right: 10, bottom: 100, left: 130 };
 let marginWidth = svgWidth - margin.left - margin.right;
 let marginHeight = svgHeight - margin.top - margin.bottom;
+let flag = true;
+let t = d3.transition().duration(750);
 
 d3.json("/directories/starbucks-profit/data/revenues.json")
   .then((data) => {
@@ -62,7 +64,8 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .text("starbucks revenue in months");
 
     // Y Label
-    g.append("text")
+    let yLabel = g
+      .append("text")
       .attr("class", "Axis-Label h4")
       .attr("style", "font-weight: normal")
       .attr("text-anchor", "middle")
@@ -74,10 +77,13 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
     // Interval dynamic
     d3.interval(() => {
       update(data);
+      flag = !flag;
     }, 1000);
     // <-- then block ends
 
     const update = (data) => {
+      let value = flag ? "revenue" : "profit";
+
       // X,Y domain scale
       x.domain(data.map((e) => e.month));
       y.domain([0, data.maxRevenue]);
@@ -103,26 +109,29 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       // Update
       rectangles
         .attr("x", (data) => x(data.month))
-        .attr("y", (data) => y(data.revenue))
         .attr("width", x.bandwidth())
+        .transition(t)
+        .attr("y", (data) => y(data[value]))
         .attr("height", (data) => {
-          return marginHeight - y(data.revenue);
+          return marginHeight - y(data[value]);
         });
       // Enter
       rectangles
         .enter()
         .append("rect")
         .attr("width", x.bandwidth())
-        .attr("height", (data) => {
-          return marginHeight - y(data.revenue);
-        })
         .attr("fill", (data) => {
-          return color(data.revenue);
+          return color(data[value]);
         })
         .attr("x", (data) => x(data.month))
         .attr("y", (data) => {
-          return marginHeight - (marginHeight - y(data.revenue));
+          return marginHeight - (marginHeight - y(data[value]));
+        })
+        .attr("height", (data) => {
+          return marginHeight - y(data[value]);
         });
+
+      yLabel.text(value);
     };
   })
   .catch((err) => console.log(err));
