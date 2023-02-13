@@ -1,20 +1,22 @@
+let svgWidth = 720;
+let svgHeight = 400;
+let margin = { top: 10, right: 10, bottom: 100, left: 130 };
+let marginWidth = svgWidth - margin.left - margin.right;
+let marginHeight = svgHeight - margin.top - margin.bottom;
+
 d3.json("/directories/starbucks-profit/data/revenues.json")
   .then((data) => {
+    // then block start -->
     data.forEach((e) => {
       e.profit = parseFloat(e.profit);
       e.revenue = parseFloat(e.revenue);
     });
 
     // Essential declaration
-    let svgWidth = 720;
-    let svgHeight = 400;
-    let margin = { top: 10, right: 10, bottom: 100, left: 130 };
-    let marginWidth = svgWidth - margin.left - margin.right;
-    let marginHeight = svgHeight - margin.top - margin.bottom;
-    let maxRevenue = d3.max(data, (d) => d.revenue);
+    data.maxRevenue = d3.max(data, (d) => d.revenue);
     let color = d3
       .scaleOrdinal()
-      .domain([0, maxRevenue])
+      .domain([0, data.maxRevenue])
       .range(["#91f086", "#48bf53", "#11823B", "#004d25"]);
     let svg = d3
       .select("#chart-area")
@@ -32,7 +34,10 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .paddingOuter(0.3);
 
     // Y Attribiute
-    let y = d3.scaleLinear().domain([0, maxRevenue]).range([marginHeight, 0]);
+    let y = d3
+      .scaleLinear()
+      .domain([0, data.maxRevenue])
+      .range([marginHeight, 0]);
 
     // Margin Group
     let g = svg
@@ -99,5 +104,6 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .attr("y", (data) => {
         return marginHeight - (marginHeight - y(data.revenue));
       });
+    // <-- then block ends
   })
   .catch((err) => console.log(err));
