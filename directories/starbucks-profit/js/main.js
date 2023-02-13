@@ -1,5 +1,5 @@
-let svgWidth = 720;
-let svgHeight = 400;
+let svgWidth = window.innerWidth - 100;
+let svgHeight = window.innerHeight - 160;
 let margin = { top: 10, right: 10, bottom: 100, left: 130 };
 let marginWidth = svgWidth - margin.left - margin.right;
 let marginHeight = svgHeight - margin.top - margin.bottom;
