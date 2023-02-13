@@ -5,6 +5,8 @@ simple svg chart at `./directories/starbucks-profit`
 ![image](https://user-images.githubusercontent.com/99330644/218257285-1278f65d-f136-4afc-9a14-1dcb1bc2feac.png)
 Starbucks profit at `./directories/starbucks-profit`
 ![image](https://user-images.githubusercontent.com/99330644/218435832-8987e672-7111-40ae-b742-bc21f6944eb2.png)
+pie chart at `./directories/piechart`
+![image](https://user-images.githubusercontent.com/99330644/218467494-a9258c71-3164-4b72-bb53-2d9456e185cf.png)
 
 open git bash and run:
 
