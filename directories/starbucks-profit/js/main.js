@@ -11,7 +11,11 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
     let margin = { top: 10, right: 10, bottom: 100, left: 130 };
     let marginWidth = svgWidth - margin.left - margin.right;
     let marginHeight = svgHeight - margin.top - margin.bottom;
-    let color = d3.scaleOrdinal().domain([0, 5]).range(d3.schemeAccent);
+    let maxRevenue = d3.max(data, (d) => d.revenue);
+    let color = d3
+      .scaleOrdinal()
+      .domain([0, maxRevenue])
+      .range(["#91f086", "#48bf53", "#11823B", "#004d25"]);
     let svg = d3
       .select("#chart-area")
       .append("svg")
@@ -26,20 +30,9 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .range([0, marginWidth])
       .paddingInner(0.3)
       .paddingOuter(0.3);
-    console.log(
-      "data",
-      data,
-      "revenue type",
-      typeof data[0].revenue,
-      "max revenue",
-      d3.max(data, (d) => d.revenue)
-    );
 
     // Y Attribiute
-    let y = d3
-      .scaleLinear()
-      .domain([0, d3.max(data, (d) => d.revenue)])
-      .range([marginHeight, 0]);
+    let y = d3.scaleLinear().domain([0, maxRevenue]).range([marginHeight, 0]);
 
     // Margin Group
     let g = svg
@@ -48,7 +41,7 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
 
     // X Label
     g.append("text")
-      .attr("class", "h4")
+      .attr("class", "Axis-Label h4")
       .attr("text-anchor", "middle")
       .attr(
         "transform",
@@ -60,7 +53,8 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
 
     // Y Label
     g.append("text")
-      .attr("class", "h4")
+      .attr("class", "Axis-Label h4")
+      .attr("style", "font-weight: normal")
       .attr("text-anchor", "middle")
       .attr("transform", "rotate(-90)")
       .attr("x", -marginHeight / 2)
@@ -75,12 +69,15 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .call(xAxis);
 
     // Axis Y
-    let yAxis = d3.axisLeft(y).tickFormat((d) =>
-      new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD"
-      }).format(d)
-    );
+    let yAxis = d3
+      .axisLeft(y)
+      .tickFormat((d) =>
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD"
+        }).format(d)
+      )
+      .ticks(7);
     g.append("g").attr("class", "yAxis").call(yAxis);
 
     // Bands
@@ -95,13 +92,12 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .attr("height", (data) => {
         return marginHeight - y(data.revenue);
       })
-      .attr("fill", (data, index) => {
-        return color(index);
+      .attr("fill", (data) => {
+        return color(data.revenue);
       })
       .attr("x", (data) => x(data.month))
       .attr("y", (data) => {
         return marginHeight - (marginHeight - y(data.revenue));
       });
   })
-
   .catch((err) => console.log(err));
