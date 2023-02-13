@@ -25,24 +25,29 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .attr("height", svgHeight)
       .attr("class", "shadow m-5");
 
-    // X Attribiute
+    // X scale
     let x = d3
       .scaleBand()
-      .domain(data.map((e) => e.month))
       .range([0, marginWidth])
       .paddingInner(0.3)
       .paddingOuter(0.3);
 
-    // Y Attribiute
-    let y = d3
-      .scaleLinear()
-      .domain([0, data.maxRevenue])
-      .range([marginHeight, 0]);
+    // Y scale
+    let y = d3.scaleLinear().range([marginHeight, 0]);
 
     // Margin Group
     let g = svg
       .append("g")
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // Axis X
+    let xAxisGroup = g
+      .append("g")
+      .attr("class", "xAxis")
+      .attr("transform", `translate(0,${marginHeight})`);
+
+    // Axis Y
+    let yAxisGroup = g.append("g").attr("class", "yAxis");
 
     // X Label
     g.append("text")
@@ -66,48 +71,58 @@ d3.json("/directories/starbucks-profit/data/revenues.json")
       .attr("y", -margin.left * 0.6)
       .text("revenue (USD)");
 
-    // Axis X
-    let xAxis = d3.axisBottom(x);
-    g.append("g")
-      .attr("class", "xAxis")
-      .attr("transform", `translate(0,${marginHeight})`)
-      .call(xAxis);
-
-    // Axis Y
-    let yAxis = d3
-      .axisLeft(y)
-      .tickFormat((d) =>
-        new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "USD"
-        }).format(d)
-      )
-      .ticks(7);
-    g.append("g").attr("class", "yAxis").call(yAxis);
-
-    // Bands
-    let rectangles = g.selectAll("rect").data(data);
-    rectangles
-      .enter()
-      .append("rect")
-      .attr("month", (data) => data.month)
-      .attr("revenue", (data) => data.revenue)
-      .attr("profit", (data) => data.profit)
-      .attr("width", x.bandwidth())
-      .attr("height", (data) => {
-        return marginHeight - y(data.revenue);
-      })
-      .attr("fill", (data) => {
-        return color(data.revenue);
-      })
-      .attr("x", (data) => x(data.month))
-      .attr("y", (data) => {
-        return marginHeight - (marginHeight - y(data.revenue));
-      });
-
+    // Interval dynamic
     d3.interval(() => {
-      console.log(new Date().getSeconds());
+      update(data);
     }, 1000);
     // <-- then block ends
+
+    const update = (data) => {
+      // X,Y domain scale
+      x.domain(data.map((e) => e.month));
+      y.domain([0, data.maxRevenue]);
+      // xy axis update
+      let xAxisCall = d3.axisBottom(x);
+      let yAxisCall = d3
+        .axisLeft(y)
+        .tickFormat((d) =>
+          new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD"
+          }).format(d)
+        )
+        .ticks(7);
+      xAxisGroup.call(xAxisCall);
+      yAxisGroup.call(yAxisCall);
+
+      // Bars
+      // Join
+      let rectangles = g.selectAll("rect").data(data);
+      // Exit
+      rectangles.exit().remove();
+      // Update
+      rectangles
+        .attr("x", (data) => x(data.month))
+        .attr("y", (data) => y(data.revenue))
+        .attr("width", x.bandwidth())
+        .attr("height", (data) => {
+          return marginHeight - y(data.revenue);
+        });
+      // Enter
+      rectangles
+        .enter()
+        .append("rect")
+        .attr("width", x.bandwidth())
+        .attr("height", (data) => {
+          return marginHeight - y(data.revenue);
+        })
+        .attr("fill", (data) => {
+          return color(data.revenue);
+        })
+        .attr("x", (data) => x(data.month))
+        .attr("y", (data) => {
+          return marginHeight - (marginHeight - y(data.revenue));
+        });
+    };
   })
   .catch((err) => console.log(err));
