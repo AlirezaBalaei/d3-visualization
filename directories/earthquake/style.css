@@ -13,8 +13,9 @@ div.tooltip {
     border-radius: 5px;
     border: 1px solid ;
     border-color: #acacac;
-    width: 100px;
+    width: 200px;
     height: auto;
+    pointer-events: none;
 }
 
 .prevent-select {

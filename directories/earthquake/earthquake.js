@@ -1,6 +1,6 @@
 var height = window.innerHeight * 0.99
 var width = window.innerWidth * 0.99
-var rScale = 8
+var rScale = 5
 const api_url =
   "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson"
 const svg = d3
@@ -29,10 +29,10 @@ d3.json(api_url).then((data) => {
     .append("circle")
   circle
     .attr("cx", (d) => {
-      return Math.random() * width * 0.9 + d.properties.mag * rScale
+      return Math.random() * width * 0.8 + (d.properties.mag * rScale)
     })
     .attr("cy", (d) => {
-      return Math.random() * height * 0.9 + d.properties.mag * rScale
+      return Math.random() * height * 0.8 + (d.properties.mag * rScale)
     })
     .attr("r", (d) => d.properties.mag * rScale)
     .attr("place", (d) => d.properties.place)
