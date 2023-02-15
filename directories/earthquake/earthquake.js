@@ -12,16 +12,48 @@ const svg = d3
 const tooltip = d3
   .select("#chart")
   .append("div")
-  .attr("class", "tooltip")
+  .attr("class", "tooltip card p-0 shadow")
   .style("opacity", 0)
+
+const plusOrMinus = () => {
+  return Math.random() < 0.5 ? -1 : 1
+}
+
+const getDate = (timestamp) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ]
+  const date = new Date(timestamp)
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`
+}
+
+const getTime = (timestamp) => {
+  const time = new Date(timestamp)
+  return `${time.getHours()}:${time.getMinutes()}`
+}
+//new Date(d.properties.time).getHours()
+//new Date(d.properties.time).getMinutes()
 
 // Data working place
 d3.json(api_url).then((data) => {
   const color = d3
-    .scaleOrdinal()
-    .domain([0, 4])
-    .range(["#B1E1FF", "#AFB4FF", "#9C9EFE", "#A66CFF"])
-  console.log(color(1.2))
+    .scaleLinear()
+    .domain([
+      d3.min(data.features, (d) => d.properties.mag),
+      d3.max(data.features, (d) => d.properties.mag)
+    ])
+    .range([0, 1])
   const circle = svg
     .selectAll("circle")
     .data(data.features)
@@ -29,15 +61,16 @@ d3.json(api_url).then((data) => {
     .append("circle")
   circle
     .attr("cx", (d) => {
-      return Math.random() * width * 0.8 + (d.properties.mag * rScale)
+      return Math.random() * width * 0.8 + d.properties.mag * rScale
     })
     .attr("cy", (d) => {
-      return Math.random() * height * 0.8 + (d.properties.mag * rScale)
+      return Math.random() * height * 0.8 + d.properties.mag * rScale
     })
     .attr("r", (d) => d.properties.mag * rScale)
     .attr("place", (d) => d.properties.place)
     .attr("mag", (d) => d.properties.mag)
-    .style("fill", (d) => color(d.properties.mag))
+    .style("filter", "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.4))")
+    .style("fill", (d) => d3.interpolateOrRd(color(d.properties.mag)))
     .on("mouseover", (d, i, n) => {
       d3.select(n[i])
         .transition()
@@ -50,15 +83,15 @@ d3.json(api_url).then((data) => {
         .style("opacity", 100)
         .style("left", `${d3.event.pageX + 10}px`)
         .style("top", `${d3.event.pageY + 10}px`)
-      
+
       tooltip.html(
-        `<p class="prevent-select">${
+        `<div class="card-header">Magnitude: ${
           d.properties.mag
-        } magnitude earthquake happend at ${
-          d.properties.place
-        } </p><p>${new Date(d.properties.time).getHours()}:${new Date(
-          d.properties.time
-        ).getMinutes()}</p>`
+        }</div><ul class="list-group list-group-flush">
+        <li class="list-group-item">Place: ${d.properties.place}</li>
+        <li class="list-group-item">${getDate(d.properties.time)}</li>
+        <li class="list-group-item">${getTime(d.properties.time)}</li>
+      </ul>`
       )
     })
     .on("mouseout", (d, i, n) => {
@@ -68,5 +101,13 @@ d3.json(api_url).then((data) => {
         .attr("r", (d) => d.properties.mag * rScale)
 
       tooltip.transition().duration(100).style("opacity", 0)
+    })
+    .on("click", (d, i, n) => {
+      d3.select(n[i])
+        .transition()
+        .duration(1000)
+        .attr("cx", width * plusOrMinus())
+        .attr("cy", height * plusOrMinus())
+      console.log(d.properties.mag)
     })
 })

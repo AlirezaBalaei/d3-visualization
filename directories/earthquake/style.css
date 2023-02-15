@@ -9,12 +9,6 @@ body {
 
 div.tooltip {
     position: absolute;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px solid ;
-    border-color: #acacac;
-    width: 200px;
-    height: auto;
     pointer-events: none;
 }
 
