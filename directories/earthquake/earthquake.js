@@ -15,7 +15,7 @@ const tooltip = d3
   .attr("class", "tooltip card p-0 shadow")
   .style("opacity", 0)
 
-const plusOrMinus = () => {
+const plusOrMinus = (cx) => {
   return Math.random() < 0.5 ? -1 : 1
 }
 
@@ -72,6 +72,8 @@ d3.json(api_url).then((data) => {
     .style("filter", "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.4))")
     .style("fill", (d) => d3.interpolateOrRd(color(d.properties.mag)))
     .on("mouseover", (d, i, n) => {
+      console.log("d",d,"i",i,"n",n)
+      console.log("this", d3.select(n[i]))
       d3.select(n[i])
         .transition()
         .duration(200)
@@ -108,6 +110,6 @@ d3.json(api_url).then((data) => {
         .duration(1000)
         .attr("cx", width * plusOrMinus())
         .attr("cy", height * plusOrMinus())
-      console.log(d.properties.mag)
+      console.log(n[i])
     })
 })
