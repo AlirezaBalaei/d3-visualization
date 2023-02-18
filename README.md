@@ -8,7 +8,10 @@ Starbucks profit at `./directories/starbucks-profit`
 pie chart at `./directories/piechart`
 ![image](https://user-images.githubusercontent.com/99330644/218467494-a9258c71-3164-4b72-bb53-2d9456e185cf.png)
 earthquake buble chart at `./directories/earthquake`
-![image](https://user-images.githubusercontent.com/99330644/218735650-008ae865-51d4-4e2c-9d73-6f4d72b0279e.png)
+![image](https://user-images.githubusercontent.com/99330644/219865782-5f2628b4-76fd-4711-bf08-054ead8fba8f.png)
+box plot chart at `./directories/boxplot`
+![image](https://user-images.githubusercontent.com/99330644/219865692-c53da43f-5958-4bf3-843b-6b9019582566.png)
+
 
 open git bash and run:
 
