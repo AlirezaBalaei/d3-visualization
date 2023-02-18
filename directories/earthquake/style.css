@@ -3,10 +3,6 @@ body {
     padding: 0;
 }
 
-#chart svg {
-    padding: 1rem;
-}
-
 div.tooltip {
     position: absolute;
     pointer-events: none;
