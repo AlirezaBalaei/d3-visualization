@@ -1,10 +1,10 @@
 // set the dimensions and margins of the graph
-var margin = {top: 100, right: 80, bottom: 80, left: 80},
+let strokeColor = "#6497b1"
+let margin = {top: 100, right: 80, bottom: 80, left: 80},
     width = window.innerWidth - margin.left - margin.right,
     height = window.innerHeight - margin.top - margin.bottom;
-
 // append the svg object to the body of the page
-var svg = d3.select("#chart-wrapper")
+let svg = d3.select("#chart-wrapper")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -13,10 +13,11 @@ var svg = d3.select("#chart-wrapper")
           `translate(${margin.left} ,${margin.top})`);
 
 // Read the data and compute summary statistics for each specie
-d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
+const dataApiUrl = "https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv"
+d3.csv("data.csv", (data) => {
 
   // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
-  var sumstat = d3
+  let sumstat = d3
     .nest() // nest function allows to group the calculation per level of a factor
     .key(d=>d.Species)
     .rollup((d) => {
@@ -51,11 +52,11 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/ir
       }
     })
     .entries(data)
-  
-    let strokeColor = "#6497b1"
-     
+
+    console.log(sumstat)
+       
   // Show the X scale
-  var x = d3.scaleBand()
+  let x = d3.scaleBand()
     .range([ 0, width ])
     .domain(["setosa", "versicolor", "virginica"])
     .paddingInner(1)
@@ -68,7 +69,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/ir
     .attr("transform", `translate(0,+10)`)
 
   // Show the Y scale
-  var y = d3.scaleLinear()
+  let y = d3.scaleLinear()
     .domain([3,9])
     .range([height, 0])
   svg
@@ -93,7 +94,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/ir
     .style("width", 40)
 
       // rectangle for the main box
-      var boxWidth = 100
+      let boxWidth = 100
       svg
         .selectAll("boxes")
         .data(sumstat)
@@ -126,5 +127,4 @@ d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/ir
         .attr("stroke", strokeColor)
         .attr("stroke-width", 5)
         .style("width", 80)
-      
 })

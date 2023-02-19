@@ -2,27 +2,28 @@ var windowHeight = window.innerHeight * 0.99
 var windowWidth = window.innerWidth * 0.99
 var rScale = 5
 
+
+const api_url ="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson"
+const margin = {top:120,right:100,bottom:100,left:150}
+const marginedWidth = windowWidth - margin.right - margin.left
+const marginedHeight = windowHeight - margin.top - margin.bottom
+
 const options = {
   backgroundColor: "#fff",
   title: {
     show: true,
     text: "earthquake bubble chart",
-    subtext: null,
+    subtext: "significant earthquakes last 30 days",
     left: null,
     textStyle: {
       textBorderType: null,
-      color: null,
+      color: "#000"
     },
     subtextStyle: {
-      color: null
+      color: "#333"
     }
   }
 }
-
-const api_url ="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/significant_month.geojson"
-const margin = {top:100,right:100,bottom:100,left:150}
-const marginedWidth = windowWidth - margin.right - margin.left
-const marginedHeight = windowHeight - margin.top - margin.bottom
 
 const svg = d3
   .select("#chart-wrapper")
@@ -30,12 +31,33 @@ const svg = d3
   .attr("width", windowWidth)
   .attr("height", windowHeight)
 
-const text = svg.append("text")
-  .attr("x", margin.left+marginedWidth/2)
-  .attr("y", margin.top/2)
+const textGraph = svg.append("g").attr("class", "chart-title")
+textGraph
+  .append("text")
+  .attr("class", "title-text")
+  .attr("x", margin.left + marginedWidth / 2)
+  .attr("y", margin.top / 2)
   .attr("text-anchor", "middle")
   .attr("class", "h4")
-  .text(options.title.show?options.title.text:"")
+  .style("fill", options.title.textStyle.color)
+  .text(options.title.show ? options.title.text : "")
+  .style("opacity", 0)
+  .transition()
+  .duration(400)
+  .style("opacity", 1)
+textGraph
+  .append("text")
+  .attr("class", "title-subtext")
+  .attr("x", margin.left + marginedWidth / 2)
+  .attr("y", margin.top / 2 + 20)
+  .attr("text-anchor", "middle")
+  .attr("class", "p")
+  .style("fill", options.title.subtextStyle.color)
+  .text(options.title.show ? options.title.subtext : "")
+  .style("opacity", 0)
+  .transition()
+  .duration(600)
+  .style("opacity", 1)
 
 const g = svg
   .append("g")
@@ -94,7 +116,14 @@ d3.json(api_url).then((data) => {
   console.log()
 
   const xAxis = d3.axisBottom(x)
-  g.append("g").call(xAxis).attr("transform", `translate(${0},${marginedHeight})`)
+  g.append("g")
+    .attr("class", "xAxis")
+    .call(xAxis)
+    .attr("transform", `translate(${0},${marginedHeight})`)
+    .style("opacity", 0)
+    .transition()
+    .duration(400)
+    .style("opacity", 1)
 
   const circle = g
     .selectAll("circle")
@@ -104,7 +133,11 @@ d3.json(api_url).then((data) => {
 
   circle
     .attr("cx", (d) => {
-      return x(getDate(d.properties.time)) + margin.left/2
+      return (
+        x(getDate(d.properties.time)) +
+        margin.left / 2 +
+        Math.random() * plusOrMinus() * 20
+      )
     })
     .attr("cy", (d) => {
       return Math.random() * marginedHeight * 0.8 + d.properties.mag * rScale
@@ -114,9 +147,13 @@ d3.json(api_url).then((data) => {
     .attr("mag", (d) => d.properties.mag)
     .style("filter", "drop-shadow(0px 0px 5px rgb(0 0 0 / 0.4))")
     .style("fill", (d) => d3.interpolateOrRd(color(d.properties.mag)))
+    .style("opacity", 0)
+    .transition()
+    .duration(600)
+    .style("opacity", 0.9)
+
+    circle
     .on("mouseover", (d, i, n) => {
-      console.log("d", d, "i", i, "n", n)
-      console.log("this", d3.select(n[i]))
       d3.select(n[i])
         .transition()
         .duration(200)
@@ -153,6 +190,5 @@ d3.json(api_url).then((data) => {
         .duration(1000)
         .attr("cx", windowWidth * plusOrMinus())
         .attr("cy", windowHeight * plusOrMinus())
-      console.log(n[i])
     })
 })

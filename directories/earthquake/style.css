@@ -1,5 +1,4 @@
 body {
-    margin: 0;
     padding: 0;
 }
 
@@ -13,3 +12,14 @@ div.tooltip {
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
   }
+
+.xAxis path,line {
+    stroke: #9489b6;
+    stroke-width: 4;
+}
+
+.xAxis text{
+    fill: #64598d;
+    font-size: .8rem;
+    font-weight: bold;
+}
