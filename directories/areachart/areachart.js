@@ -92,11 +92,13 @@ let dots = graph
   .data(data)
   .enter()
   .append("circle")
+  .attr("data", d=>d)
   .attr("cx",((d,i)=>x(parseMonths(months[i]))))
   .attr("cy", y)
   .attr("r", 3)
   .attr("fill", color[2])
-  .on("mouseover", (d,i)=>{console.log(`d: ${d}, i: ${i}`)})
+  .on("mouseover", function(e){d3.select(this).attr("r", 4);console.log(d3.select(this).attr("data"))})
+  .on("mouseout", function(e){d3.select(this).attr("r", 3)})
 
 // Style
 d3.selectAll(".xAxis text").attr("color", color[0]).attr("font-weight", "bold").attr("font-size", "14")
