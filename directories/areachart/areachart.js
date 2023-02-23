@@ -35,7 +35,7 @@ graph = svg
 .append("g")
 .attr("class", "graph")
 .attr("width", width-margin.left-margin.right)
-.attr("height", height-margin.left-margin.right)
+.attr("height", height-margin.top-margin.bottom-10)
 .attr("transform", `translate(${margin.left},${margin.top})`)
 
 let graphWidth = d3
@@ -44,13 +44,15 @@ let graphWidth = d3
 let graphHeight = d3
   .select(".graph")
   .attr("height")
+// X Scale
 let x = d3
   .scaleTime()
   .domain(d3.extent(months, m=>parseMonths(m)))
   .range([0,graphWidth])
+// Y Scale
 let y = d3
   .scaleLinear()
-  .domain([data[0],data[data.length-1]])
+  .domain([0,data[data.length-1]])
   .range([graphHeight,0])
 let area = d3
   .area()
