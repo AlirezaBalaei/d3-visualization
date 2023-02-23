@@ -14,6 +14,26 @@ let svg = d3.select("#chart-wrapper")
     .attr("transform",
           `translate(${margin.left} ,${margin.top})`);
 
+// change data.name ==> d[col_rel["labels"]] 
+// change data ==> 
+
+
+d3.csv("data.csv", (data) => {
+  
+  d = []
+  d.push(data)
+  console.log(d)
+
+
+
+
+
+
+})
+
+
+
+
 // Read the data and compute summary statistics for each specie
 d3.csv("data.csv", (data) => {
   // Compute quartiles, median, inter quantile range min and max --> these info are then used to draw the box.
@@ -60,6 +80,9 @@ d3.csv("data.csv", (data) => {
     .call(d3.axisBottom(x))
     .selectAll("text")
     .attr("transform", `translate(0,+10)`)
+    .attr("fill", "#6497b1")
+    .attr("font-weight", "bold")
+    .attr("font-size", "0.8rem")
 
   // Show the Y scale
   let y = d3
@@ -72,6 +95,9 @@ d3.csv("data.csv", (data) => {
     .call(d3.axisLeft(y).tickSizeInner(-width))
     .selectAll("text")
     .attr("transform", `translate(-10,0)`)
+    .attr("fill", "#6497b1")
+    .attr("font-weight", "bold")
+    .attr("font-size", "0.8rem")
 
   // Show the main vertical line
   svg
@@ -92,7 +118,7 @@ d3.csv("data.csv", (data) => {
     .style("width", 40)
 
   // rectangle for the main box
-  let boxWidth = 100
+  let boxWidth = 60
   svg
     .selectAll("boxes")
     .data(sumstat)
