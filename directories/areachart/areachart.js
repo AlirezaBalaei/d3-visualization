@@ -25,7 +25,7 @@ console.log(d3.extent(months , m=>parseMonths(m)))
 data = data.sort((a,b)=>a-b)
 console.log(data)
 
-let margin = {top: 10, right: 10, bottom: 10, left: 50}
+let margin = {top: 40, right: 10, bottom: 10, left: 50}
 svg = d3
   .select("#chart-wrapper")
   .append("svg")
@@ -35,7 +35,7 @@ graph = svg
 .append("g")
 .attr("class", "graph")
 .attr("width", width-margin.left-margin.right)
-.attr("height", height-margin.top-margin.bottom-10)
+.attr("height", height-margin.top-margin.bottom-20)
 .attr("transform", `translate(${margin.left},${margin.top})`)
 
 let graphWidth = d3
@@ -59,12 +59,13 @@ let area = d3
   .x((d,i)=>x(parseMonths(months[i])))
   .y0(graphHeight)
   .y1(d=>y(d))
-  .curve(d3.curveBasis)
+  .curve(d3.curveLinear)
 
 graph
   .append("path")
   .attr("fill", color[4])
   .attr("stroke", color[3])
+  .attr("stroke-width", 2)
   .attr("d", area(data))
 
 // X Axis
@@ -83,3 +84,24 @@ graph
   .append("g")
   .attr("class", "yAxis")
   .call(d3.axisLeft(y))
+
+
+// Dots
+let dots = graph
+  .selectAll("circle")
+  .data(data)
+  .enter()
+  .append("circle")
+  .attr("cx",((d,i)=>x(parseMonths(months[i]))))
+  .attr("cy", y)
+  .attr("r", 3)
+  .attr("fill", color[2])
+  .on("mouseover", (d,i)=>{console.log(`d: ${d}, i: ${i}`)})
+
+// Style
+d3.selectAll(".xAxis text").attr("color", color[0]).attr("font-weight", "bold").attr("font-size", "14")
+d3.selectAll(".xAxis path").attr("color", color[0]).attr("stroke-width", 3)
+d3.selectAll(".xAxis line").attr("color", color[0]).attr("stroke-width", 3)
+d3.selectAll(".yAxis text").attr("color", color[0]).attr("font-weight", "bold").attr("font-size", "14")
+d3.selectAll(".yAxis path").attr("color", color[0]).attr("stroke-width", 3)
+d3.selectAll(".yAxis line").attr("color", color[0]).attr("stroke-width", 3)
