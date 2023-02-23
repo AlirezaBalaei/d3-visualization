@@ -12,8 +12,7 @@ earthquake buble chart at `./directories/earthquake`
 box plot chart at `./directories/boxplot`
 ![image](https://user-images.githubusercontent.com/99330644/219865692-c53da43f-5958-4bf3-843b-6b9019582566.png)
 area chart at `./directories/areachart`
-![image](https://user-images.githubusercontent.com/99330644/220839351-d9cf7dd4-b0c4-4717-bbb8-ba28ed6b6066.png)
-
+![image](https://user-images.githubusercontent.com/99330644/220875152-4920ab73-d578-4e6f-98c0-33e33c4b1f06.png)
 
 open git bash and run:
 
