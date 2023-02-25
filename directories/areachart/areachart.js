@@ -25,7 +25,7 @@ console.log(d3.extent(months , m=>parseMonths(m)))
 data = data.sort((a,b)=>a-b)
 console.log(data)
 
-let margin = {top: 40, right: 10, bottom: 10, left: 50}
+let margin = {top: 40, right: 10, bottom: 10, left: 100}
 svg = d3
   .select("#chart-wrapper")
   .append("svg")
